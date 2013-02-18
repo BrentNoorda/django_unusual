@@ -1,4 +1,6 @@
 Django==1.4.3
 distribute==0.6.27
+gevent==0.13.8
+greenlet==0.4.0
 gunicorn==0.14.5
 wsgiref==0.1.2
