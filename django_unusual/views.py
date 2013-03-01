@@ -6,14 +6,16 @@ import logging
 logger = logging.getLogger(__name__)
 
 import mako
+import mako.lookup
 
+# Mako Template Lookup to find files in /mako directory and stores the compiled code
+# into /tmp/mako_modules, and do other settings for DEBUG versus DEPLOY
 MakoTemplateLookup = mako.lookup.TemplateLookup(
     directories=[os.path.normpath(django_unusual.settings.PROJECT_PATH+'/mako')],
     module_directory=os.path.normpath(django_unusual.settings.PROJECT_PATH + '/tmp/mako_modules'),
     filesystem_checks=django_unusual.settings.DEBUG,
     output_encoding='utf-8', encoding_errors='replace',
     strict_undefined=django_unusual.settings.DEBUG )
-
 
 def show_mako_page(request,filename):
     response = HttpResponse()

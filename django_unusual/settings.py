@@ -1,7 +1,9 @@
 # Django settings for django_unusual project.
 
+import os
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
