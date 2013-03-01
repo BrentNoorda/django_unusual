@@ -5,6 +5,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+
+    url(r'^(.*\.mako)$', django_unusual.views.show_mako_page),
+    url(r'^$', django_unusual.views.show_mako_page, {'filename':'home.mako'}),
+
     # Examples:
     # url(r'^$', 'django_unusual.views.home', name='home'),
     # url(r'^django_unusual/', include('django_unusual.foo.urls')),
