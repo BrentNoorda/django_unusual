@@ -53,9 +53,33 @@ def show_markdown_page(request,filename):
         input_file = codecs.open(filespec, mode="r", encoding="utf-8")
         text = input_file.read()
         input_file.close()
-        html = markdown.markdown(text)
+        html = markdown.markdown(text,extensions=['nl2br'],output_format="html5")
 
-        print html
+        html = ( '<!DOCTYPE html>\r\n'
+                 '<html>\r\n'
+                 '<head>\r\n'
+                 '<style type="text/css">\r\n'      # /path-slash-ok/
+                 'body pre {\r\n'
+                 '  background-color: #f8f8f8;\r\n'
+                 '  border: 1px solid #ccc;\r\n'
+                 '  font-size: 12px;\r\n'
+                 '  line-height: 19px;\r\n'
+                 '  overflow: auto;\r\n'
+                 '  padding: 6px 10px;\r\n'
+                 '  border-radius: 3px;\r\n'
+                 '}\r\n'
+                 '#markdown-body {\r\n'
+                 '  background-color: #fff;\r\n'
+                 '  border: 1px solid #CACACA;\r\n'
+                 '  padding: 30px;\r\n'
+                 '  margin: 10px\r\n'
+                 '}\r\n'
+                 '</style>\r\n'
+                 '</head>\r\n'
+                 '<body><div id="markdown-body">\r\n' ) + (
+                 html ) + (
+                 '</div></body>\r\n'
+                 '</html>' )
 
         response = HttpResponse(html,content_type="text/html")
         response['Cache-Control'] = 'no-cache'
