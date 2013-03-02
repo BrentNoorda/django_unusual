@@ -7,4 +7,4 @@ Django Unusual Agenda!
 * **anal-retentive time-savers** - DoOvers, asserts, & crash recording (because I hate bugs)
 
 ------
-[&lt;&lt; prev](README.md) - [next &gt;&gt;](SLIDE_02.md)
+[&lt;&lt; prev](../README.md) -- [top](../README.md) -- [next &gt;&gt;](SLIDE_02.md)

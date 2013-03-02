@@ -59,4 +59,4 @@ create an environment, grab everything in this presentation from github, and ign
 
 
 ------
-[&lt;&lt; prev](SLIDE_01.md) - [next &gt;&gt;](SLIDE_03.md)
+[&lt;&lt; prev](SLIDE_01.md) -- [top](../README.md) -- [next &gt;&gt;](SLIDE_03.md)
