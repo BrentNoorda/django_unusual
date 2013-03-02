@@ -10,6 +10,8 @@ urlpatterns = patterns('',
     url(r'^(.*\.mako)$', django_unusual.views.show_mako_page),
     url(r'^$', django_unusual.views.show_mako_page, {'filename':'home.mako'}),
 
+    url(r'^(.*\.md)$', django_unusual.views.show_markdown_page),
+
     # Examples:
     # url(r'^$', 'django_unusual.views.home', name='home'),
     # url(r'^django_unusual/', include('django_unusual.foo.urls')),
