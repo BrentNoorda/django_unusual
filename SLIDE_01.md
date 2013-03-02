@@ -1,0 +1,10 @@
+Django Unusual Agenda!
+=========
+
+* **mako** - an alternative to the django template language - it's more Pythonic
+* **gevent** - maximal client support per-CPU through never wasting time
+* **API calls** - instead of web pages (RESTfulish and other options)
+* **anal-retentive time-savers** - DoOvers, asserts, & crash recording (because I hate bugs)
+
+------
+[&lt;&lt; prev](README.md) - [next &gt;&gt;](SLIDE_02.md)

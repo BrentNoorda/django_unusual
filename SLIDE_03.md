@@ -1,0 +1,62 @@
+Boring Setup Stuff
+=========
+
+Here's how I installed everything. It's boring. To play along you should probably skip this and just do the [short installation instructions](#short).
+
+### long installation instructions
+
+Install django and other packages, and init database:
+
+    --- make django environment ---
+    # mkdir django_unusual
+    # cd django_unusual
+    # virtualenv venv --distribute
+    # source venv/bin/activate
+    # pip install django
+    --- install extra packages ---
+    # pip install psycopg2
+    # pip install psycopg2==2.4.5
+    # pip install gunicorn==0.14.5
+    # pip install gevent==0.13.8 (good luck with that!)
+    --- initialize postgresql database (sqllite wouldn’t be as demonstrative of gevent) ---
+    # createuser -U postgres django_unusual -P
+    Enter password for new role:
+    Enter it again:
+    Shall the new role be a superuser? (y/n) n
+    Shall the new role be allowed to create databases? (y/n) y
+    Shall the new role be allowed to create more new roles? (y/n) n
+    # createdb -U django_unusual -E utf8 -O django_unusual django_unusual -T template0
+
+Create and initialize django project:
+
+    --- create project ---
+    # django-admin.py startproject django_unusual (weirder than this with venv, but ignore that)
+    --- check that it runs ---
+    # python manage.py runserver
+    --- change database settings for postgresql ---
+    in settings.py change ENGINE='django.db.backends.postgresql_psycopg2' and set NAME, USER, and PASSWORD to 'django_unusual'
+    --- let django initialize the database ---
+    python manage.py syncdb
+    --- enable the admin server ---
+    in urls.py uncomment "url(r'^admin/',..." and the two lines below '# Uncomment the next two lines...'
+    in settings.py INSTALLED_APPS uncomment 'django.contrib.admin'
+
+Now we have a default django server where <code># python manage.py runserver</code> only delivers <code>[http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)</code>. Nothing interesting yet.
+
+<a name="short"/>
+### short installation instructions
+
+create an environment, grab everything in this presentation from github, and ignore all further installation instructions
+
+    --- get all the code from github ---
+    # git clone https://github.com/BrentNoorda/django_unusual.git
+    --- set up virtualenv environment ---
+    # cd django_unusual
+    # virtualenv venv --distribute
+    # source venv/bin/activate              -- I do this through # . ./setenv.sh
+
+    # pip install django
+
+
+------
+[&lt;&lt; prev](SLIDE_01.md) - [next &gt;&gt;](SLIDE_03.md)
