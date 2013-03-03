@@ -8,5 +8,9 @@ if [ "$VENVDIR" != "$VIRTUAL_ENV" ]; then
    exit 1
 fi
 
+echo
+python -c "import socket; print 'browse to 127.0.0.1:8000 or',socket.gethostbyname(socket.gethostname())+':8000';"
+echo
+
 #open http://localhost:8000/
 python manage.py runserver 0.0.0.0:8000
