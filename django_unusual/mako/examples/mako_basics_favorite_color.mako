@@ -49,21 +49,27 @@
 
         <p>What is your favorite color now (at ${datetime.datetime.now()})?</p>
 
-        % for k,v in gColors.items():
-            <a href="./mako_basics_favorite_color.mako?favorite=${ k | u}"
-            style="background-color:${rgbattr(v['rgb'])};color:${rgbattr(v['rgb'] ^ 0xFFFFFF)}">
-                ${ k | h}
-            </a>
-            popularity: ${ v['votes'] }
-            <br/>
+        <table border="1">
+            <tr><td>color</td><td>popularity</td></tr>
+            % for k,v in gColors.items():
+                <tr>
+                    <td style="background-color:${ rgbattr(v['rgb'] )}">
+                        <a href="./mako_basics_favorite_color.mako?favorite=${ k | u}" style="color:${rgbattr(v['rgb'] ^ 0xFFFFFF)}">
+                            ${ k | h}
+                        </a>
+                    </td>
+                    <td>
+                        ${ v['votes'] }
+                    </td>
 
-            <%
-                # python code blocks can appear anywhwere, this one checks if color is more popular
-                if (popular_color is None) or (gColors[popular_color]['votes'] < v['votes']):
-                    popular_color = k
-            %>
+                    <%
+                        # python code blocks can appear anywhwere, this one checks if color is more popular
+                        if (popular_color is None) or (gColors[popular_color]['votes'] < v['votes']):
+                            popular_color = k
+                    %>
 
-        % endfor
+            % endfor
+        </table>
 
         <p>This page has been visited ${get_visitor_count()} times.</p>
 
