@@ -8,5 +8,5 @@ if [ "$VENVDIR" != "$VIRTUAL_ENV" ]; then
    exit 1
 fi
 
-open http://localhost:8000/
-python manage.py runserver
+#open http://localhost:8000/
+python manage.py runserver 0.0.0.0:8000
