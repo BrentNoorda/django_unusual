@@ -5,10 +5,10 @@
   </head>
   <body>
     <p>Howdy everybody!</p>
-    <p>Examples
-    ... links to a bunch of examples ...
+    <p>Example Pages
     <ul>
-      <li><a href="examples.mako">Examples For This Presentation</a></li>
+      <li><a href="examples/mako_basics_favorite_color.mako">mako_basics_favorite_color.mako</a>
+        (*[source code](https://github.com/BrentNoorda/django_unusual/blob/master/django_unusual/mako/examples/mako_basics_favorite_color.mako]()*)</li>
     </ul>
     <p><a href="/admin" target="djunadmin">Django Admin</a></p>
     <p><b><a href="/README.md" target="slideshow">README.md</a></b></p>
