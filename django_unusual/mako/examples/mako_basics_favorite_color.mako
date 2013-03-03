@@ -24,24 +24,21 @@
         return '#' + ret
 
     visitor_count = 0   # this is a global where we count how many times anyone has visited this
-                        # page - this is a really bad idea because of restartes, multiple
-                        # processes or forks, and in-processconcurrency
+                        # page - this is BAD CODE because of restarts, multiple
+                        # processes or forks, and in-process concurrency
 
-    def get_visitor_count():    # bad code, because of the global stuff mentioned above
+    def get_visitor_count():    # BAD CODE, because of the global stuff mentioned above
         global visitor_count
         visitor_count += 1
         return visitor_count
-
 %>
 <%
     # python code blocks can appear anywhwere, this one will initialize stuff
     popular_color = None
 
-    try:
+    if 'favorite' in request.GET:
         favorite_color = request.GET['favorite']
         gColors[favorite_color]['votes'] += 1    # this is bad code because of global stuff
-    except:
-        pass
 %>
 <html lang="en">
     <head/>
