@@ -1,0 +1,12 @@
+## common footer in our example pages - this could be any mako code
+<%page args="allRights=True"/>
+
+<div style="background-color:#ccc;width:100%;padding:3px 10px 3px 10px;">
+    Copyright 2013 Salmonella Enterprises<br/>
+    % if allRights:
+        All Rights Preserved<br/>
+    % else:
+        We Reserve the Right to Serve Refuse to Anyone
+    % endif
+    <br/><a href="/">Home</a>
+</div>

@@ -94,5 +94,7 @@
             <p>The most popular color is ${ popular_color | h }</p>
         % endif
 
+        <%include file="example_footer.include" args="allRights=False"/>
+
     </body>
 </html>
