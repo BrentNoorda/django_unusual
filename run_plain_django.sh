@@ -9,4 +9,4 @@ if [ "$VENVDIR" != "$VIRTUAL_ENV" ]; then
 fi
 
 open http://localhost:8000/
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
