@@ -5,7 +5,11 @@
   </head>
   <body>
     <p>Howdy everybody!</p>
-    <p><a href="examples.mako">Examples For This Presentation</a></p>
-    <p><a href="/README.md">README.md</a></p>
+    <p>Examples
+    <ul>
+      <li><a href="examples.mako">Examples For This Presentation</a></li>
+    </ul>
+    <p><a href="/admin" target="djunadmin">Django Admin</a></p>
+    <p><b><a href="/README.md" target="slideshow">README.md</a></b></p>
   </body>
 </html>
