@@ -31,18 +31,38 @@
         global visitor_count
         visitor_count += 1
         return visitor_count
+
+    def get_previous_favorite(request):    # get prevous favorite of this user, or None
+        try:
+            return request.session['favorite_color']
+        except:
+            return None
+
+    def set_previous_favorite(request,favorite_color):
+        request.session['favorite_color'] = favorite_color
 %>
 <%
     # python code blocks can appear anywhwere, this one will initialize stuff
     popular_color = None
 
+    previous_favorite = get_previous_favorite(request)
+
     if 'favorite' in request.GET:
         favorite_color = request.GET['favorite']
         gColors[favorite_color]['votes'] += 1    # this is bad code because of global stuff
+        set_previous_favorite(request,favorite_color)
+    else:
+        favorite_color = None
 %>
 <html lang="en">
     <head/>
     <body>
+
+        % if favorite_color is not None:
+            <p>You selected ${ favorite_color | h }.</p>
+        % endif
+
+        <p>Your previous favorite was ${ previous_favorite }.</p>
 
         <p>What is your favorite color now (at ${datetime.datetime.now()})?</p>
 
