@@ -9,7 +9,7 @@ import requests
 OAKLAND_WEATHER_URL = 'http://weather.yahoo.com/united-states/california/oakland-12797399/'
 TEMPERATURE_REGEXP = r'<div class="day-temp-current temp-f ">(\d+)&'
 
-def get_current_oakland_weather(extra_delay=0,fail_sometimes_on_purpose=False):
+def get_current_oakland_weather(extra_delay=0,fail_sometimes_on_purpose=False,default=None):
 
     try:
 
@@ -31,9 +31,11 @@ def get_current_oakland_weather(extra_delay=0,fail_sometimes_on_purpose=False):
         match = re.search(TEMPERATURE_REGEXP,html.content)
         return int(match.group(1))
 
-    except Exception, err:
-        print err
-        raise
+    except:
+        if default is None:
+            raise
+        else:
+            return default
 
 
 

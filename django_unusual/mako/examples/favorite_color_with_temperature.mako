@@ -5,16 +5,17 @@
     ##                      globals (but seldom writable globals)
 
     import datetime
+    import lib.oakland_weather
 
     gColors = { # list colors and their RGB value
-        'red' :       { 'rgb':0xFF0000, 'votes': 0 }, # votes will be seen as a bad idea
-        'green':      { 'rgb':0x00FF00, 'votes': 0 },
-        'blue':       { 'rgb':0x0000FF, 'votes': 0 },
-        'black':      { 'rgb':0x000000, 'votes': 0 },
-        'white':      { 'rgb':0xFFFFFF, 'votes': 0 },
-        'yellow':     { 'rgb':0xFFFF00, 'votes': 0 },
-        'purple':     { 'rgb':0xFF00FF, 'votes': 0 },
-        'black&blue': { 'rgb':0x000099, 'votes': 0 },
+        'red' :       { 'rgb':0xFF0000, 'temperatures': [] }, # global temperature will be seen as a bad idea
+        'green':      { 'rgb':0x00FF00, 'temperatures': [] },
+        'blue':       { 'rgb':0x0000FF, 'temperatures': [] },
+        'black':      { 'rgb':0x000000, 'temperatures': [] },
+        'white':      { 'rgb':0xFFFFFF, 'temperatures': [] },
+        'yellow':     { 'rgb':0xFFFF00, 'temperatures': [] },
+        'purple':     { 'rgb':0xFF00FF, 'temperatures': [] },
+        'black&blue': { 'rgb':0x000099, 'temperatures': [] },
     }
 
     def rgbattr(rgb):   # return HTML friendly version of color
@@ -49,7 +50,8 @@
 
     if 'favorite' in request.GET:
         favorite_color = request.GET['favorite']
-        gColors[favorite_color]['votes'] += 1    # this is bad code because of global stuff
+        current_temperature = lib.oakland_weather.get_current_oakland_weather(extra_delay=5,default=72)
+        gColors[favorite_color]['temperatures'].append(current_temperature)
         set_previous_favorite(request,favorite_color)
     else:
         favorite_color = None
@@ -59,7 +61,7 @@
     <body>
 
         % if favorite_color is not None:
-            <p>You selected ${ favorite_color | h }.</p>
+            <p>You selected ${ favorite_color | h } and the temperature was ${current_temperature}.</p>
         % endif
 
         <p>Your previous favorite was ${ previous_favorite }.</p>
@@ -67,21 +69,33 @@
         <p>What is your favorite color now (at ${datetime.datetime.now()})?</p>
 
         <table border="1">
-            <tr><td>color</td><td>popularity</td></tr>
+            <tr><td>color</td><td>popularity</td><td>avg. temp</td></tr>
             % for name,v in gColors.items():
                 <tr>
                     <td style="background-color:${ rgbattr(v['rgb'] )}">
-                        <a href="./mako_basics_favorite_color.mako?favorite=${ name | u}" style="color:${rgbattr(v['rgb'] ^ 0xFFFFFF)}">
+                        <a href="./favorite_color_with_temperature.mako?favorite=${ name | u}" style="color:${rgbattr(v['rgb'] ^ 0xFFFFFF)}">
                             ${ name | h}
                         </a>
                     </td>
                     <td>
-                        ${ v['votes'] }
+                        ${ len(v['temperatures']) }
+                    </td>
+                    <td>
+                        % if len(v['temperatures']) == 0:
+                            <span style="color:#bbb">n/a</span>
+                        % else:
+                            <%
+                                total_temp = 0
+                                for temp in v['temperatures']:
+                                    total_temp += temp
+                            %>
+                            ${ total_temp / len(v['temperatures'])}
+                        % endif
                     </td>
 
                     <%
                         # python code blocks can appear anywhwere, this one checks if color is more popular
-                        if (popular_color is None) or (gColors[popular_color]['votes'] < v['votes']):
+                        if (popular_color is None) or (len(gColors[popular_color]['temperatures']) < len(v['temperatures'])):
                             popular_color = name
                     %>
                 </tr>
