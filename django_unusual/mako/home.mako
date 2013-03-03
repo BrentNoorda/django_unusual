@@ -6,6 +6,7 @@
   <body>
     <p>Howdy everybody!</p>
     <p>Examples
+    ... links to a bunch of examples ...
     <ul>
       <li><a href="examples.mako">Examples For This Presentation</a></li>
     </ul>
