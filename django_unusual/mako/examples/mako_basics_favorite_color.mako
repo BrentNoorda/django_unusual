@@ -6,16 +6,16 @@
 
     import datetime
 
-    gColors = [ # list colors and their RGB value
-        { 'name':'red',         'rgb':0xFF0000,     'votes': 0 }, # votes will be seen as a bad idea
-        { 'name':'green',       'rgb':0x00FF00,     'votes': 0 },
-        { 'name':'blue',        'rgb':0x0000FF,     'votes': 0 },
-        { 'name':'black',       'rgb':0x000000,     'votes': 0 },
-        { 'name':'white',       'rgb':0xFFFFFF,     'votes': 0 },
-        { 'name':'yellow',      'rgb':0xFFFF00,     'votes': 0 },
-        { 'name':'purple',      'rgb':0xFF00FF,     'votes': 0 },
-        { 'name':'black&blue',  'rgb':0x000099,     'votes': 0 },
-    ]
+    gColors = { # list colors and their RGB value
+        'red' :       { 'rgb':0xFF0000, 'votes': 0 }, # votes will be seen as a bad idea
+        'green':      { 'rgb':0x00FF00, 'votes': 0 },
+        'blue':       { 'rgb':0x0000FF, 'votes': 0 },
+        'black':      { 'rgb':0x000000, 'votes': 0 },
+        'white':      { 'rgb':0xFFFFFF, 'votes': 0 },
+        'yellow':     { 'rgb':0xFFFF00, 'votes': 0 },
+        'purple':     { 'rgb':0xFF00FF, 'votes': 0 },
+        'black&blue': { 'rgb':0x000099, 'votes': 0 },
+    }
 
     def rgbattr(rgb):   # return HTML friendly version of color
         ret = '%X' % (rgb & 0xFFFFFF)
@@ -33,21 +33,43 @@
         return visitor_count
 
 %>
+<%
+    # python code blocks can appear anywhwere, this one will initialize stuff
+    popular_color = None
+
+    try:
+        favorite_color = request.GET['favorite']
+        gColors[favorite_color]['votes'] += 1    # this is bad code because of global stuff
+    except:
+        pass
+%>
 <html lang="en">
-  <head/>
-  <body>
+    <head/>
+    <body>
 
-    <p>What is your favorite color now (at ${datetime.datetime.now()})?</p>
+        <p>What is your favorite color now (at ${datetime.datetime.now()})?</p>
 
-    % for color in gColors:
-      <a href="./mako_basics_favorite_color.mako?favorite=${ color['name'] | u}"
-       style="background-color:${rgbattr(color['rgb'])};color:${rgbattr(color['rgb'] ^ 0xFFFFFF)}">
-        ${ color['name'] | h}
-      </a>
-      <br/>
-    % endfor
+        % for k,v in gColors.items():
+            <a href="./mako_basics_favorite_color.mako?favorite=${ k | u}"
+            style="background-color:${rgbattr(v['rgb'])};color:${rgbattr(v['rgb'] ^ 0xFFFFFF)}">
+                ${ k | h}
+            </a>
+            popularity: ${ v['votes'] }
+            <br/>
 
-    <p>This page has been visited ${get_visitor_count()} times.</p>
+            <%
+                # python code blocks can appear anywhwere, this one checks if color is more popular
+                if (popular_color is None) or (gColors[popular_color]['votes'] < v['votes']):
+                    popular_color = k
+            %>
 
-  </body>
+        % endfor
+
+        <p>This page has been visited ${get_visitor_count()} times.</p>
+
+        % if popular_color is not None:
+            <p>The most popular color is ${ popular_color | h }</p>
+        % endif
+
+    </body>
 </html>
