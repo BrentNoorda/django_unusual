@@ -18,5 +18,7 @@ export EVENT_NOKQUEUE
 LOCAL_DEV=True
 export LOCAL_DEV
 
+launchctl limit maxfiles 10000 20000
+
 # wrap escapes in \[ and \] based on what I learned at http://hintsforums.macworld.com/showthread.php?t=17068
 export PS1="\[\e[0;33m\]django_unsual \[\e[0;36m\][\w]#\[\e[0;33m\] "
