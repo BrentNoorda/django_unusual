@@ -1,6 +1,13 @@
 ## common footer in our example pages - this could be any mako code
 <%page args="allRights=True"/>
-
+<%!
+    import os
+    import resource
+%>
+<%
+    proc_id = os.getpid()
+    mem_use = float(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss) / (1024.0*1024.0)
+%>
 <div style="background-color:#ccc;width:100%;padding:3px 10px 3px 10px;">
     Copyright 2013 Salmonella Enterprises<br/>
     % if allRights:
@@ -8,5 +15,6 @@
     % else:
         We Reserve the Right to Serve Refuse to Anyone
     % endif
-    <br/><a href="/">Home</a>
+
+    <br/><a href="/">Home</a><span style="float:right;margin-right:2em;">pid:${proc_id} - mem:${'%.02f'%mem_use}MB</span>
 </div>
