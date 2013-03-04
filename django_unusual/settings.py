@@ -151,9 +151,9 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'django_unusual.views':{
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'verbose'
         },
     },
     'loggers': {
@@ -164,7 +164,7 @@ LOGGING = {
         },
         'django_unusual.views': {
             'handlers': ['django_unusual.views'],
-            'level': 'ERROR',
+            'level': 'INFO',
             'propagate': True,
         },
     }
