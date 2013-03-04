@@ -19,7 +19,7 @@ def get_current_oakland_weather(extra_delay=0,fail_sometimes_on_purpose=False,de
         url = OAKLAND_WEATHER_URL
 
         if fail_sometimes_on_purpose:
-            if 0 == random.randint(0,1):
+            if 0 == random.randint(0,4):    # fail 20% of the time on purpose
                 # build a url to fail
                 url = "http://www."
                 for i in range(0,50):

@@ -6,16 +6,17 @@
 
     import datetime
     import lib.oakland_weather
+    from django_unusual.models import ColorTemp
 
-    gColors = { # list colors and their RGB value
-        'red' :       { 'rgb':0xFF0000, 'temperatures': [] }, # global temperature will be seen as a bad idea
-        'green':      { 'rgb':0x00FF00, 'temperatures': [] },
-        'blue':       { 'rgb':0x0000FF, 'temperatures': [] },
-        'black':      { 'rgb':0x000000, 'temperatures': [] },
-        'white':      { 'rgb':0xFFFFFF, 'temperatures': [] },
-        'yellow':     { 'rgb':0xFFFF00, 'temperatures': [] },
-        'purple':     { 'rgb':0xFF00FF, 'temperatures': [] },
-        'black&blue': { 'rgb':0x000099, 'temperatures': [] },
+    gColorRGBs = { # list known colors and their RGB
+        'red' :       0xFF0000,
+        'green':      0x00FF00,
+        'blue':       0x0000FF,
+        'black':      0x000000,
+        'white':      0xFFFFFF,
+        'yellow':     0xFFFF00,
+        'purple':     0xFF00FF,
+        'black&blue': 0x000099,
     }
 
     def rgbattr(rgb):   # return HTML friendly version of color
@@ -24,14 +25,9 @@
             ret = '0' + ret
         return '#' + ret
 
-    visitor_count = 0   # this is a global where we count how many times anyone has visited this
-                        # page - this is BAD CODE because of restarts, multiple
-                        # processes or forks, and in-process concurrency
-
-    def get_visitor_count():    # BAD CODE, because of the global stuff mentioned above
-        global visitor_count
-        visitor_count += 1
-        return visitor_count
+    def get_total_votes():    # total vote count for the past hour
+        too_old_to_care = datetime.datetime.utcnow() - datetime.timedelta(hours = ColorTemp.HOW_MANY_HOURS_TO_CARE)
+        return ColorTemp.objects.filter(created__gt = too_old_to_care).count()
 
     def get_previous_favorite(request):    # get prevous favorite of this user, or None
         try:
@@ -51,10 +47,25 @@
     if 'favorite' in request.GET:
         favorite_color = request.GET['favorite']
         current_temperature = lib.oakland_weather.get_current_oakland_weather(extra_delay=5,default=72)
-        gColors[favorite_color]['temperatures'].append(current_temperature)
         set_previous_favorite(request,favorite_color)
+
+        # store this color in the db at this time
+        ColorTemp(created=datetime.datetime.utcnow(),color=favorite_color,temperature=current_temperature).save()
     else:
         favorite_color = None
+
+    # load up all the colors into colorCounts dict by name, where each entry
+    # has these fields based on data received in the past hour
+    #  'total' : how many of these were selected in the past hour
+    #  'totalTemp' : add up the temperature at each selected time in the past hour
+    colorCounts = { }
+    too_old_to_care = datetime.datetime.utcnow() - datetime.timedelta(hours = ColorTemp.HOW_MANY_HOURS_TO_CARE)
+    for ct in ColorTemp.objects.filter(created__gt = too_old_to_care):
+        try:
+            colorCounts[ct.color]['total'] += 1
+            colorCounts[ct.color]['totalTemp'] += ct.temperature
+        except:
+            colorCounts[ct.color] = { 'total':1, 'totalTemp':ct.temperature }
 %>
 <html lang="en">
     <head/>
@@ -71,40 +82,35 @@
         <p>What is your favorite color now (at ${datetime.datetime.now()})?</p>
 
         <table border="1">
-            <tr><td>color</td><td>popularity</td><td>avg. temp</td></tr>
-            % for name,v in gColors.items():
+            <tr><td>color</td><td>hourly popularity</td><td>avg. temp</td></tr>
+            % for name,rgb in gColorRGBs.items():
                 <tr>
-                    <td style="background-color:${ rgbattr(v['rgb'] )}">
-                        <a href="./favorite_color_with_temperature.mako?favorite=${ name | u}" style="color:${rgbattr(v['rgb'] ^ 0xFFFFFF)}">
+                    <td style="background-color:${ rgbattr(rgb) }">
+                        <a href="./favorite_color_with_temperature_and_db.mako?favorite=${ name | u}" style="color:${rgbattr(rgb ^ 0xFFFFFF)}">
                             ${ name | h}
                         </a>
                     </td>
                     <td>
-                        ${ len(v['temperatures']) }
+                        ${ colorCounts[name].total if (name in colorCounts) else 0 }
                     </td>
                     <td>
-                        % if len(v['temperatures']) == 0:
+                        % if name not in colorCounts:
                             <span style="color:#bbb">n/a</span>
                         % else:
+                            ${ colorCounts[name]['totalTemp'] / colorCounts[name]['total'] }
                             <%
-                                total_temp = 0
-                                for temp in v['temperatures']:
-                                    total_temp += temp
+                                # python code blocks can appear anywhwere, this one checks if color is more popular
+                                if (popular_color is None) or (colorCounts[popular_color]['total'] < colorCounts[name]['total']):
+                                    popular_color = name
                             %>
-                            ${ total_temp / len(v['temperatures'])}
                         % endif
                     </td>
 
-                    <%
-                        # python code blocks can appear anywhwere, this one checks if color is more popular
-                        if (popular_color is None) or (len(gColors[popular_color]['temperatures']) < len(v['temperatures'])):
-                            popular_color = name
-                    %>
                 </tr>
             % endfor
         </table>
 
-        <p>This page has been visited ${get_visitor_count()} times.</p>
+        <p>There have been ${get_total_votes()} votes in the past hour.</p>
 
         % if popular_color is not None:
             <p>The most popular color is ${ popular_color | h }</p>

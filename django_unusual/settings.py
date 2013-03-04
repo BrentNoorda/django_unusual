@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'django_unusual',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -155,6 +156,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
+        'django_unusual.models':{
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django.request': {
@@ -164,6 +170,11 @@ LOGGING = {
         },
         'django_unusual.views': {
             'handlers': ['django_unusual.views'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django_unusual.models': {
+            'handlers': ['django_unusual.models'],
             'level': 'INFO',
             'propagate': True,
         },
