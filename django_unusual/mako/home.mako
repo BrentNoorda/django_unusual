@@ -4,7 +4,7 @@
     <title>Home</title>
   </head>
   <body>
-    <p>Howdy everybody!</p>
+    <p>Howdy everybody!</b></p>
     <p>Example Pages
     <ul>
       <li><a href="examples/mako_basics_favorite_color.mako">mako_basics_favorite_color.mako</a>

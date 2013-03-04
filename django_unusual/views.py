@@ -1,5 +1,6 @@
 import os
 import codecs
+import socket
 import markdown
 from django.http import HttpResponse
 import django_unusual.settings
@@ -80,6 +81,8 @@ def show_markdown_page(request,filename):
                  html ) + (
                  '</div></body>\r\n'
                  '</html>' )
+
+        html = html.replace('MY_IP_ADDRESS',socket.gethostbyname(socket.gethostname()))
 
         response = HttpResponse(html,content_type="text/html")
         response['Cache-Control'] = 'no-cache'
