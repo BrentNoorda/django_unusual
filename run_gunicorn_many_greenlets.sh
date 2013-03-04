@@ -1,4 +1,5 @@
 #!/bin/bash
+# RUN SERVER WITH A SINGLE WORKER FORK AND MANY GREENLETS
 
 # check that the environment looks correct and the directory is correct
 DIR=$(cd $(dirname "$0"); pwd)
