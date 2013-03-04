@@ -12,6 +12,9 @@ export DYLD_LIBRARY_PATH
 PATH=/Library/PostgreSQL/9.1/bin:$PATH
 export PATH
 
+EVENT_NOKQUEUE=1
+export EVENT_NOKQUEUE
+
 LOCAL_DEV=True
 export LOCAL_DEV
 
