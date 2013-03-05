@@ -161,6 +161,18 @@ class Crash(models.Model):
         except Exception:
             logger.exception("ERROR ON Crash.record")
 
+    def how_long_ago(self):
+        timedelta = datetime.datetime.utcnow().replace(microsecond=0) - self.last
+        timedelta_seconds = timedelta.seconds + ( timedelta.days * (60 * 60 * 24) )
+        if timedelta.days != 0:
+            return u'(%.2f days old)' % (float(timedelta_seconds) / float(60*60*24))
+        elif timedelta_seconds > (60 * 60):
+            return u'(%.2f hours old)' % (float(timedelta_seconds) / float(60*60))
+        elif timedelta_seconds > 60:
+            return u'(%.2f minutes old)' % (float(timedelta_seconds) / float(60))
+        else:
+            return u'(%d seconds old)' % timedelta_seconds
+
     def __unicode__(self):
         return u'%d %s %s - %s - %s - %s:%d' % (self.count,unicode(self.last),self.how_long_ago(),self.label[:40],self.details[:80],self.filename,self.lineno)
 

@@ -7,6 +7,7 @@ import random
 import requests
 
 OAKLAND_WEATHER_URL = 'http://weather.yahoo.com/united-states/california/oakland-12797399/'
+URL_THAT_WILL_SURELY_FAIL = "http://weather.yahoo.commie/blah"
 TEMPERATURE_REGEXP = r'<div class="day-temp-current temp-f ">(\d+)&'
 
 def get_current_oakland_weather(extra_delay=0,fail_sometimes_on_purpose=False,default=None):
@@ -20,11 +21,7 @@ def get_current_oakland_weather(extra_delay=0,fail_sometimes_on_purpose=False,de
 
         if fail_sometimes_on_purpose:
             if 0 == random.randint(0,4):    # fail 20% of the time on purpose
-                # build a url to fail
-                url = "http://www."
-                for i in range(0,50):
-                    url += str(random.randint(0,9))
-                url += ".com/"
+                url = URL_THAT_WILL_SURELY_FAIL
 
         html = requests.get(url,timeout=5.0)
         html.raise_for_status()
