@@ -3,6 +3,7 @@ import codecs
 import socket
 import markdown
 from django.http import HttpResponse
+import django_unusual.models
 import django_unusual.settings
 
 import logging
@@ -30,7 +31,8 @@ def show_mako_page(request,filename):
         if response.status_code == 200:  # if not 200 then something internally has changed the response code
             response.content = html
 
-    except: # Exception, err:
+    except Exception, err:
+        django_unusual.models.Crash.record(request=request,label="ERROR ON show_mako_page",details=unicode(err))
         if django_unusual.settings.DEBUG:
             logger.exception(str(mako.exceptions.html_error_template().render()))
             response.content = mako.exceptions.html_error_template().render()
@@ -88,7 +90,6 @@ def show_markdown_page(request,filename):
         response['Cache-Control'] = 'no-cache'
 
     except Exception, err:
-        print "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
         response = HttpResponse()
         if django_unusual.settings.DEBUG:
             logger.exception(err)

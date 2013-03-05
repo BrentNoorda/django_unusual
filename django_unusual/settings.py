@@ -43,7 +43,7 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False # True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"      # /path-slash-ok/
@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'django_unusual',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -155,6 +156,16 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
+        'django_unusual.api':{
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
+        'django_unusual.models':{
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
     },
     'loggers': {
         'django.request': {
@@ -164,6 +175,16 @@ LOGGING = {
         },
         'django_unusual.views': {
             'handlers': ['django_unusual.views'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django_unusual.api': {
+            'handlers': ['django_unusual.api'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django_unusual.models': {
+            'handlers': ['django_unusual.models'],
             'level': 'INFO',
             'propagate': True,
         },

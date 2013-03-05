@@ -62,6 +62,8 @@
 
         % if favorite_color is not None:
             <p>You selected ${ favorite_color | h } and the temperature was ${current_temperature}.</p>
+            ## any line starting with a '##' is a comment, other than pointing that out I
+            ## had no real reason to put this comment here
         % endif
 
         <p>Your previous favorite was ${ previous_favorite }.</p>
