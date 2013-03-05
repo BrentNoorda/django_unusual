@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 import django_unusual.views
+from django_unusual.api import api_get_temperature
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -14,6 +15,8 @@ urlpatterns = patterns('',
 
     url(r'^(.*\.mako)$', django_unusual.views.show_mako_page),
     url(r'^$', django_unusual.views.show_mako_page, {'filename':'home.mako'}),
+
+    url(r'^api/get_temperature$', api_get_temperature),
 
     url(r'^(.*\.md)$', django_unusual.views.show_markdown_page),
 

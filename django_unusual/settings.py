@@ -156,6 +156,11 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
+        'django_unusual.api':{
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
+        },
         'django_unusual.models':{
             'level': 'INFO',
             'class': 'logging.StreamHandler',
@@ -170,6 +175,11 @@ LOGGING = {
         },
         'django_unusual.views': {
             'handlers': ['django_unusual.views'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django_unusual.api': {
+            'handlers': ['django_unusual.api'],
             'level': 'INFO',
             'propagate': True,
         },
