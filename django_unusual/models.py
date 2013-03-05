@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 ############################### ColorTemp ###############################
 ## Record user color choices, along with the temperature in oakland when that happened.
-## The id in her cycles back to zero after it gets too big.
+## The id in her cycles back to 1 after it gets too big.
 ## You should run demos/ColorTemp_GC.py once in a while to clear out old crap (because
 ## we only care about this stuff over about the past hour).
 
@@ -160,42 +160,6 @@ class Crash(models.Model):
 
         except Exception:
             logger.exception("ERROR ON Crash.record")
-
-
-    @staticmethod
-    def trytryagain_alert(cookie_obj,attempts,retry_wait_total,errType,errValue,errTraceback):
-        # while we are not yet sure how often we'll used this (e.g. for S3 failures) we will record each instance in crash log
-        request = None
-        label = ''
-        if cookie_obj is not None:
-            request = cookie_obj.get('request',None)
-            label = cookie_obj.get('label','')
-        Crash.record(request=request,label='trytryagain failing after %d attempts and waiting a total %d milliseconds. %s' % (attempts,retry_wait_total,label),
-                     details=unicode(errValue),trace=errTraceback)
-        return True
-
-    @classmethod
-    def warning_message(cls):
-        # return a message about what's wrong, and level - level 0 means no problem (and no message)
-        # else level 1 is a warning and level 2 is an error and level 3 is severe
-        now = datetime.datetime.utcnow()
-        def too_old_count(minutes,msg):
-            recent_time = now - datetime.timedelta(minutes=minutes)
-            count = cls.objects.filter(last__gte=recent_time).count()
-            if count == 0:
-                return None
-            else:
-                return 'At least %d calls to Crash.record in the past %s.' % (count,msg)
-        bad = too_old_count(15,'15 minutes')
-        if bad is not None:
-            return 3,bad
-        bad = too_old_count(60,'hour')
-        if bad is not None:
-            return 2,bad
-        bad = too_old_count(60*24,'day')
-        if bad is not None:
-            return 1,bad
-        return 0,None
 
     def __unicode__(self):
         return u'%d %s %s - %s - %s - %s:%d' % (self.count,unicode(self.last),self.how_long_ago(),self.label[:40],self.details[:80],self.filename,self.lineno)
