@@ -46,7 +46,7 @@
 
     if 'favorite' in request.GET:
         favorite_color = request.GET['favorite']
-        current_temperature = lib.oakland_weather.get_current_oakland_weather(extra_delay=5,default=72)
+        current_temperature = lib.oakland_weather.get_current_oakland_weather(fail_sometimes_on_purpose=True)
         set_previous_favorite(request,favorite_color)
 
         # store this color in the db at this time
@@ -91,7 +91,7 @@
                         </a>
                     </td>
                     <td>
-                        ${ colorCounts[name].total if (name in colorCounts) else 0 }
+                        ${ colorCounts[name]['total'] if (name in colorCounts) else 0 }
                     </td>
                     <td>
                         % if name not in colorCounts:
