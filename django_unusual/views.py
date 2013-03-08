@@ -52,7 +52,6 @@ def show_markdown_page(request,filename):
             # no cheating allowed by trying to read another path
             raise Exception("cannot look there at " + filespec )
 
-
         input_file = codecs.open(filespec, mode="r", encoding="utf-8")
         text = input_file.read()
         input_file.close()
@@ -61,6 +60,7 @@ def show_markdown_page(request,filename):
         html = ( '<!DOCTYPE html>\r\n'
                  '<html>\r\n'
                  '<head>\r\n'
+                 '<title>DjUn %s</title>\r\n'
                  '<style type="text/css">\r\n'      # /path-slash-ok/
                  'body pre {\r\n'
                  '  background-color: #f8f8f8;\r\n'
@@ -79,7 +79,7 @@ def show_markdown_page(request,filename):
                  '}\r\n'
                  '</style>\r\n'
                  '</head>\r\n'
-                 '<body><div id="markdown-body">\r\n' ) + (
+                 '<body><div id="markdown-body">\r\n' % os.path.basename(filespec)[:-3] ) + (
                  html ) + (
                  '</div></body>\r\n'
                  '</html>' )
