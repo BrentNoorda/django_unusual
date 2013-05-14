@@ -5,7 +5,7 @@ This is sample code and documentation for a presentation about ways to extend dj
 
 The official home for this is at [github/BrentNoorda/django_unusual](https://github.com/BrentNoorda/django_unusual)
 
-Presented at the [March 5, 2013 Oakland Django/Python Meetup](http://www.meetup.com/The-San-Francisco-Django-Meetup-Group/events/104484632/).
+Presented at the [March 5, 2013 Oakland Django/Python Meetup](http://www.meetup.com/The-San-Francisco-Django-Meetup-Group/events/104484632/) and again (with minor updates) at the [May 14, 2013 Oakland Django/Python Meetup](http://www.meetup.com/The-San-Francisco-Django-Meetup-Group/events/116946492/).
 
 -------------
 
